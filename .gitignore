@@ -1,5 +1,6 @@
 # Dependencies
 node_modules/
+.pnpm-store/
 
 # Environment Variables
 .env
@@ -11,6 +12,10 @@ node_modules/
 # Build Output
 dist/
 build/
+src/**/*.js
+src/**/*.js.map
+src/**/*.d.ts
+src/**/*.d.ts.map
 
 # Logs
 logs/

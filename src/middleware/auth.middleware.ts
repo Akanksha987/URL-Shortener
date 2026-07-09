@@ -1,8 +1,8 @@
-import { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 interface JwtPayload {
-  id: string;
+  id: number;
   email: string;
 }
 
@@ -26,16 +26,27 @@ export const verifyJWT = (req: Request, res: Response, next: NextFunction) => {
     }
 
     const token = authHeader.split(" ")[1];
+    const secret = process.env.JWT_SECRET;
 
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string,
-    ) as JwtPayload;
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: "Access token is missing",
+      });
+    }
+
+    if (!secret) {
+      return res.status(500).json({
+        success: false,
+        message: "JWT_SECRET is not configured",
+      });
+    }
+
+    const decoded = jwt.verify(token, secret) as unknown as JwtPayload;
 
     req.user = decoded;
-
     next();
-  } catch (error) {
+  } catch (_error) {
     return res.status(401).json({
       success: false,
       message: "Invalid or expired token",

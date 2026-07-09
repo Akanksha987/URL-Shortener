@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import * as authService from "../services/auth.service.js";
 
 export const signup = async (
@@ -60,9 +60,7 @@ export const refreshToken = async (
   next: NextFunction
 ) => {
   try {
-    const token = await authService.generateAccessToken(
-      req.body.refreshToken
-    );
+    const token = await authService.generateAccessToken(req.body.refreshToken);
 
     res.status(200).json({
       success: true,
