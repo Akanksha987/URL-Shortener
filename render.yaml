@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: url-shortener-api
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    preDeployCommand: npm run deploy:migrate
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_REFRESH_SECRET
+        sync: false
+      - key: BASE_URL
+        sync: false
+      - key: CORS_ORIGIN
+        value: "*"
